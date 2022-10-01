@@ -12,6 +12,9 @@ return function(stage, typ)
         if self.typ == "coin" then
             stage.player.coin = stage.player.coin + 1
         end
+        if self.typ == "ammo" then
+            stage.player.ammo = stage.player.ammo + 1
+        end
     end
     return item
 end

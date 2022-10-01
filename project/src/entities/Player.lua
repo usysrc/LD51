@@ -6,6 +6,9 @@ return function(stage)
         x = 0,
         y = 4,
         coin = 0,
+        hp = 10,
+        maxhp = 10,
+        ammo = 5
     }
 
     player.update = function(self, dt) end
@@ -27,26 +30,46 @@ return function(stage)
         return sx, sy
     end
 
+    player.enemyUnderMouse = function(self)
+        local stx, sty = self:getMouseTileCoords()
+        for enemy in all(stage.enemies) do
+            if enemy.x == stx and enemy.y == sty then
+                return enemy
+            end
+        end
+    end
+
     player.draw = function(self) 
         local px, py = self:getTileCoords()
         love.graphics.draw(Image.player, px, py)
         local sx, sy = self:getMouseCoords()
         love.graphics.setColor(1,0,0)
         if self:canGotoMouse() then
-            love.graphics.setColor(1,1,1)
+            if self:enemyUnderMouse() then
+                love.graphics.draw(Image.crosshair, sx, sy)
+            else 
+                love.graphics.setColor(1,1,1)
+                love.graphics.draw(Image.selector, sx, sy)
+            end
         end
-        love.graphics.draw(Image.selector, sx, sy)
     end
 
     player.drawInventory = function(self)
         love.graphics.printf(self.coin.."C", 32, love.graphics.getHeight() - 32, 32, "center")
+        love.graphics.printf(self.hp.."HP", love.graphics.getWidth() - 64, love.graphics.getHeight() - 32, 64, "center")
+        love.graphics.printf(self.ammo.."AMMO", love.graphics.getWidth() - 160, love.graphics.getHeight() - 32, 96, "center")
+
+        -- healthbar
+        love.graphics.setColor(1,0,0)
+        love.graphics.rectangle("fill", love.graphics.getWidth()/2 - 64, 16, 128*self.hp/self.maxhp, 16)
+        love.graphics.setColor(1,1,1)
+        love.graphics.rectangle("line", love.graphics.getWidth()/2 - 64, 16, 128, 16)
     end
 
     player.canGotoMouse = function(self)
         local px, py = self:getTileCoords()
         local sx, sy = self:getMouseCoords()
         if px == sx or py == sy then
-        
             return true
         end
     end
@@ -54,9 +77,40 @@ return function(stage)
     player.gotoMouse = function(self)
         local px, py = self:getTileCoords()
         local sx, sy = self:getMouseCoords()
-
+        local enemy = player:enemyUnderMouse()
+       
         if player:canGotoMouse() then
-            player.x, player.y = self:getMouseTileCoords()
+            if enemy then
+                if self.ammo > 0 then
+                    self.ammo = self.ammo - 1
+                    del(stage.enemies, enemy)
+                end
+                return
+            end
+
+            local tx, ty = self:getMouseTileCoords()
+            local move = function()
+                for x=player.x, tx, tx > player.x and 1 or -1 do
+                    for y=player.y, ty, ty > player.y and 1 or -1 do
+                        local terrain = stage.map[x..","..y]
+                        local enemy
+                        for e in all(stage.enemies) do
+                            if e.x == x and e.y == y then
+                                enemy = e
+                            end
+                        end
+                        if terrain and terrain.opt.solid then
+                            return
+                        elseif enemy then
+                            return
+                        else
+                            player.x = x
+                            player.y = y
+                        end
+                    end
+                end
+            end
+            move()
             if player.x > 32 then
                 Gamestate.switch(Win, {
                     coin = self.coin
@@ -68,6 +122,14 @@ return function(stage)
                     item:collect()
                 end
             end
+            return true
+        end
+    end
+
+    player.hit = function(self, amt)
+        self.hp = self.hp - amt
+        if self.hp <= 0 then
+            Gamestate.switch(Death)
         end
     end
     return player
