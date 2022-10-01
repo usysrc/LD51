@@ -27,7 +27,7 @@ return function(stage, typ)
     end
     enemy.update = function(self, dt) end
     enemy.turn = function(self)
-        for k=1,4 do
+        for k=1,3 do
             if self.x + self.dir.x*k == stage.player.x and self.y + self.dir.y*k == stage.player.y then
                 local bullet = {
                     x = self.x,

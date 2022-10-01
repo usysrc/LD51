@@ -45,7 +45,7 @@ function Game:enter()
     end
     for i=1, 32 do
         if math.random() < 1 then
-            local item = Item(stage, math.random() < 0.5 and "coin" or "ammo")
+            local item = Item(stage, ({"coin", "ammo", "heart"})[math.random(1,3)])
             item.x = i
             item.y = math.random(1, 8)
             if not map[item.x..","..item.y] then

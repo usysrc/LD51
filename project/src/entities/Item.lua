@@ -15,6 +15,16 @@ return function(stage, typ)
         if self.typ == "ammo" then
             stage.player.ammo = stage.player.ammo + 1
         end
+        if self.typ == "heart" then
+            if stage.player.hp == stage.player.maxhp then
+                return true
+            end
+            stage.player.hp = stage.player.hp + 1
+            if stage.player.hp > stage.player.maxhp then
+                stage.player.hp = stage.player.maxhp
+                return true
+            end
+        end
     end
     return item
 end

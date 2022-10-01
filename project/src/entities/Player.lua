@@ -6,9 +6,9 @@ return function(stage)
         x = 0,
         y = 4,
         coin = 0,
-        hp = 10,
-        maxhp = 10,
-        ammo = 5
+        hp = 3,
+        maxhp = 3,
+        ammo = 2
     }
 
     player.update = function(self, dt) end
@@ -56,7 +56,6 @@ return function(stage)
 
     player.drawInventory = function(self)
         love.graphics.printf(self.coin.."C", 32, love.graphics.getHeight() - 32, 32, "center")
-        love.graphics.printf(self.hp.."HP", love.graphics.getWidth() - 64, love.graphics.getHeight() - 32, 64, "center")
         love.graphics.printf(self.ammo.."AMMO", love.graphics.getWidth() - 160, love.graphics.getHeight() - 32, 96, "center")
 
         -- healthbar
@@ -64,6 +63,9 @@ return function(stage)
         love.graphics.rectangle("fill", love.graphics.getWidth()/2 - 64, 16, 128*self.hp/self.maxhp, 16)
         love.graphics.setColor(1,1,1)
         love.graphics.rectangle("line", love.graphics.getWidth()/2 - 64, 16, 128, 16)
+        love.graphics.setColor(0,0,0)
+        love.graphics.printf(self.hp.."/"..self.maxhp, love.graphics.getWidth()/2 - 64, 10, 128, "center")
+        love.graphics.setColor(1,1,1)
     end
 
     player.canGotoMouse = function(self)
@@ -118,8 +120,10 @@ return function(stage)
             end
             for item in all(stage.items) do 
                 if player.x == item.x and player.y == item.y then
-                    del(stage.items, item)
-                    item:collect()
+                    local persist = item:collect()
+                    if not persist then
+                        del(stage.items, item)
+                    end
                 end
             end
             return true
