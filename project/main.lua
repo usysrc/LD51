@@ -26,6 +26,7 @@ end
 -- Initialization
 function love.load(arg)
 	math.randomseed(os.time())
+    love.graphics.setFont(love.graphics.newFont("fonts/HelvetiPixel.ttf", 32))
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	-- love.mouse.setVisible(false)
     -- print "Require Sources:"
