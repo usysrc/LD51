@@ -38,9 +38,11 @@ return function(stage, typ)
                 end
                 bullet.update = function(self, dt) end
                 table.insert(stage.stuff, bullet)
+                Sfx.laserShoot:play()
                 timer.tween(0.05, bullet, {x = stage.player.x, y = stage.player.y}, "linear", function()
                     del(stage.stuff, bullet)
                     stage.player:hit(1)
+                    Sfx.hit:play()
                 end)
                 
             end

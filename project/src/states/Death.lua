@@ -13,6 +13,7 @@ Death = Gamestate.new()
 local stuff
 
 function Death:enter()
+    love.audio.stop()
     stuff = {}
 end
 

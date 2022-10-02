@@ -85,7 +85,10 @@ return function(stage)
             if enemy then
                 if self.ammo > 0 then
                     self.ammo = self.ammo - 1
+                    Sfx.laserShoot:play()
                     del(stage.enemies, enemy)
+                else
+                    Sfx.invalid:play()
                 end
                 return
             end
@@ -112,6 +115,7 @@ return function(stage)
                     end
                 end
             end
+            Sfx.jump:play()
             move()
             if player.x > 32 then
                 Gamestate.switch(Win, {
@@ -122,6 +126,7 @@ return function(stage)
                 if player.x == item.x and player.y == item.y then
                     local persist = item:collect()
                     if not persist then
+                        Sfx.pickupCoin:play()
                         del(stage.items, item)
                     end
                 end
