@@ -117,7 +117,7 @@ return function(stage)
             end
             Sfx.jump:play()
             move()
-            if player.x > 32 then
+            if player.x > 64 then
                 Gamestate.switch(Win, {
                     coin = self.coin
                 })

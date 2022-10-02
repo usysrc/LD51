@@ -10,7 +10,7 @@ distdir=../bin/
 windir=~/dist/love-11.4-win64
 osxapp=~/dist/love.app/
 
-game=GAMENAME
+game=runright
 sources=main.lua src/**/*.lua libs/**/*.lua **/*.lua *.lua
 res=img/*.* music/*.* sfx/*.* fonts/*.*
 

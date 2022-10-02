@@ -36,7 +36,7 @@ function Game:enter()
     map = {}
     terrain = {}
     
-    for i=1, 32 do
+    for i=1, 64 do
         for j=1, 8 do
             if math.random() < 0.2 then
                 local rock = Terrain(stage, "rock", { solid = true })
@@ -46,7 +46,7 @@ function Game:enter()
             end
         end
     end
-    for i=1, 32 do
+    for i=1, 64 do
         if math.random() < 1 then
             local item = Item(stage, ({"coin", "ammo", "heart"})[math.random(1,3)])
             item.x = i
@@ -95,7 +95,7 @@ function Game:draw()
     cam:attach()
     secTimer:highlight()
     love.graphics.setColor(1,1,1)
-    for i=0,32 do
+    for i=0,64 do
         for j=0,8 do
             love.graphics.draw(Image.grass, i*tilesize, j*tilesize)
         end
