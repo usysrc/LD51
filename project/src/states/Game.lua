@@ -26,6 +26,9 @@ local cam
 local map
 
 function Game:enter()
+    Music.level:setLooping(true)
+    love.audio.play(Music.level)
+
     local stage = {}
     enemies = {}
     items = {}
